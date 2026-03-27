@@ -12,7 +12,6 @@ body{
  font-family:monospace;
 }
 
-/* BOX */
 .box{
  padding:20px;
  margin:12px;
@@ -24,10 +23,7 @@ body{
  border-radius:12px;
 }
 .box.active{opacity:1}
-.box:active{
- transform:translateY(8px);
- box-shadow:0 0;
-}
+.box:active{transform:translateY(8px);box-shadow:0 0;}
 
 .screen{
  display:none;
@@ -51,7 +47,6 @@ input,button{
  border:1px solid #ff4da6;
 }
 
-/* HEART */
 #heart{
  position:absolute;
  width:90px;
@@ -60,7 +55,6 @@ input,button{
  transform:translate(-50%,-50%) rotate(-45deg);
  left:50%;
  top:50%;
- cursor:grab;
 }
 #heart:before,#heart:after{
  content:'';
@@ -145,7 +139,7 @@ function openScreen(n){
  if(n==4) setTimeout(initHeart,100);
 }
 
-/* ⭐ النجوم */
+/* ⭐ */
 let pts=[{x:80,y:120},{x:320,y:120},{x:200,y:230},{x:100,y:380},{x:300,y:380}];
 let cur=0,ctx;
 
@@ -153,13 +147,7 @@ function initStars(){
  let c=document.getElementById("stars");
  ctx=c.getContext("2d");
  draw();
-
- c.onclick=()=>{
-  if(cur<pts.length){
-   cur++;
-   draw();
-  }
- };
+ c.onclick=()=>{ if(cur<pts.length){cur++;draw();}};
 }
 
 function draw(){
@@ -167,17 +155,12 @@ function draw(){
  pts.forEach(p=>{
   ctx.beginPath();
   ctx.arc(p.x,p.y,6,0,6.28);
-  ctx.fillStyle="white";
   ctx.fill();
  });
-
  if(cur>0){
   ctx.beginPath();
   ctx.moveTo(pts[0].x,pts[0].y);
-  for(let i=1;i<cur;i++){
-   ctx.lineTo(pts[i].x,pts[i].y);
-  }
-  ctx.strokeStyle="white";
+  for(let i=1;i<cur;i++){ctx.lineTo(pts[i].x,pts[i].y);}
   ctx.stroke();
  }
 }
@@ -202,7 +185,6 @@ function checkBday(){
 /* 👤 */
 function checkName(){
  let v=document.getElementById("name").value.toLowerCase();
-
  if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
   let b4=document.getElementById("b4");
   b4.classList.add("active");
@@ -211,42 +193,66 @@ function checkName(){
  }
 }
 
-/* 🫀 القلب */
-let heart,drag=false,time=10,started=false;
+/* 🫀 قلب واقعي */
+let heart,drag=false,started=false,time=10,falling=false,vy=0;
 
 function initHeart(){
  heart=document.getElementById("heart");
 
- heart.onmousedown=()=>{
-  drag=true;
-  if(!started){
-   started=true;
-   startTimer();
-  }
- };
+ heart.onmousedown=startDrag;
+ heart.ontouchstart=startDrag;
 
- document.onmouseup=()=>drag=false;
+ document.onmouseup=stopDrag;
+ document.ontouchend=stopDrag;
 
- document.onmousemove=(e)=>{
-  if(drag){
-   heart.style.left=e.clientX+"px";
-   heart.style.top=e.clientY+"px";
-  }
- };
+ document.onmousemove=moveHeart;
+ document.ontouchmove=moveHeart;
+}
+
+function startDrag(e){
+ drag=true;
+ if(!started){started=true;startTimer();}
+ e.preventDefault();
+}
+
+function stopDrag(){
+ drag=false;
+ falling=true;
+ fall();
+}
+
+function moveHeart(e){
+ if(!drag) return;
+ let x=e.touches?e.touches[0].clientX:e.clientX;
+ let y=e.touches?e.touches[0].clientY:e.clientY;
+ heart.style.left=x+"px";
+ heart.style.top=y+"px";
+}
+
+function fall(){
+ if(!falling) return;
+ vy+=0.5;
+ let top=heart.offsetTop+vy;
+ heart.style.top=top+"px";
+ if(top>window.innerHeight-50){breakHeart();return;}
+ requestAnimationFrame(fall);
+}
+
+function breakHeart(){
+ heart.style.background="darkred";
+ heart.innerHTML="💔";
+ setTimeout(()=>{alert("you broke my heart...");location.reload();},1000);
 }
 
 function startTimer(){
  let int=setInterval(()=>{
   time--;
   document.getElementById("timer").innerText=time;
-
   if(time<=0){
    clearInterval(int);
-
    let b5=document.getElementById("b5");
    b5.classList.add("active");
    b5.onclick=()=>openScreen(5);
-
    openScreen(5);
   }
  },1000);
@@ -256,18 +262,15 @@ function startTimer(){
 function next6(){
  let b6=document.getElementById("b6");
  b6.classList.add("active");
- b6.onclick=()=>openScreen(6);
  openScreen(6);
 }
-
 function next7(){
  let b7=document.getElementById("b7");
  b7.classList.add("active");
- b7.onclick=()=>openScreen(7);
  openScreen(7);
 }
 
-/* 💌 YES */
+/* 💌 */
 function yes(){
  document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2'></div><audio controls autoplay><source src='HIM - Join Me In Death.mp3'></audio>";
 
@@ -286,7 +289,6 @@ function yes(){
 
  let i=0;
  let el=document.getElementById("msg");
-
  let int=setInterval(()=>{
   el.innerHTML+=msg[i];
   i++;
@@ -294,7 +296,6 @@ function yes(){
  },20);
 }
 
-/* ❌ NO */
 function no(){
  document.body.innerHTML="<h1>then why are u still here?</h1>";
  setTimeout(()=>location.reload(),2000);

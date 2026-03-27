@@ -89,10 +89,11 @@ canvas{
 <div class="box" id="b7">Final 🌹</div>
 </div>
 
-<!-- ⭐ النجوم -->
+<!-- ⭐ -->
 <div class="screen" id="s1">
 <canvas id="stars" width="400" height="500"></canvas>
 <button onclick="finishStars()">Continue</button>
+<button onclick="document.getElementById('song').play()">Play Song 🖤</button>
 </div>
 
 <!-- 🎂 -->
@@ -156,40 +157,40 @@ canvas{
 
 <script>
 
-/* فتح شاشة */
+/* screens */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
 
+ if(n==1) setTimeout(initStars,100);
  if(n==2) vintage.play();
  if(n==3) whisper.play();
+ if(n==4) setTimeout(initHeart,100);
  if(n==5) glitch.play();
  if(n==6) glass.play();
  if(n==7) piano.play();
 }
 
-/* ⭐ النجوم (مضمون يشتغل) */
-let pts = [
+/* ⭐ stars */
+let pts=[
  {x:80,y:120},{x:320,y:120},
  {x:200,y:230},{x:100,y:380},{x:300,y:380}
 ];
-
-let cur = 0;
-let ctx;
+let cur=0, ctx;
 
 function initStars(){
- let c = document.getElementById("stars");
+ let c=document.getElementById("stars");
  if(!c) return;
 
- ctx = c.getContext("2d");
+ ctx=c.getContext("2d");
  draw();
 
- c.addEventListener("click", ()=>{
-  if(cur < pts.length){
+ c.onclick=()=>{
+  if(cur<pts.length){
    cur++;
    draw();
   }
- });
+ };
 }
 
 function draw(){
@@ -207,36 +208,30 @@ function draw(){
  if(cur>0){
   ctx.beginPath();
   ctx.strokeStyle="white";
-  ctx.lineWidth=2;
   ctx.moveTo(pts[0].x,pts[0].y);
 
   for(let i=1;i<cur;i++){
-    ctx.lineTo(pts[i].x,pts[i].y);
+   ctx.lineTo(pts[i].x,pts[i].y);
   }
 
   ctx.stroke();
  }
 }
 
-document.addEventListener("DOMContentLoaded", initStars);
-
 function finishStars(){
- if(cur === pts.length){
-  document.getElementById("song").play();
+ if(cur===pts.length){
+  song.play();
   document.getElementById("s1").style.display="none";
 
-  let b2 = document.getElementById("b2");
+  let b2=document.getElementById("b2");
   b2.classList.add("active");
-  b2.onclick = ()=>openScreen(2);
+  b2.onclick=()=>openScreen(2);
  }
 }
 
 /* 🎂 */
 function checkBday(){
- let v=bday.value.toLowerCase();
- if(v.includes("1")){
-  openScreen(3);
- }
+ if(bday.value.includes("1")) openScreen(3);
 }
 
 /* 👤 */
@@ -247,27 +242,30 @@ function checkName(){
  }
 }
 
-/* 🫀 */
-let heart=document.getElementById("heart");
-let drag=false,started=false,time=10;
+/* 🫀 heart */
+let heart, drag=false, started=false, time=10;
 
-heart.onmousedown=()=>{
- drag=true;
- if(!started){
-  heartbeat.play();
-  startTimer();
-  started=true;
- }
-};
+function initHeart(){
+ heart=document.getElementById("heart");
 
-document.onmouseup=()=>drag=false;
+ heart.onmousedown=()=>{
+  drag=true;
+  if(!started){
+   heartbeat.play();
+   startTimer();
+   started=true;
+  }
+ };
 
-document.onmousemove=(e)=>{
- if(drag){
-  heart.style.left=e.clientX+"px";
-  heart.style.top=e.clientY+"px";
- }
-};
+ document.onmouseup=()=>drag=false;
+
+ document.onmousemove=(e)=>{
+  if(drag){
+   heart.style.left=e.clientX+"px";
+   heart.style.top=e.clientY+"px";
+  }
+ };
+}
 
 function startTimer(){
  let int=setInterval(()=>{
@@ -308,7 +306,7 @@ function type(text,el){
 
 function yes(){
  document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2;text-align:left'></div>";
- document.getElementById("piano").play();
+ piano.play();
 
  let msg=`بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️
 

@@ -10,6 +10,7 @@ body{
  background:linear-gradient(135deg,#2b001f,#5a0f3d,#8a1c5a);
  color:white;
  font-family:monospace;
+ overflow:hidden;
 }
 
 .box{
@@ -47,6 +48,7 @@ input,button{
  border:1px solid #ff4da6;
 }
 
+/* 🫀 HEART */
 #heart{
  position:absolute;
  width:90px;
@@ -155,12 +157,14 @@ function draw(){
  pts.forEach(p=>{
   ctx.beginPath();
   ctx.arc(p.x,p.y,6,0,6.28);
+  ctx.fillStyle="white";
   ctx.fill();
  });
  if(cur>0){
   ctx.beginPath();
   ctx.moveTo(pts[0].x,pts[0].y);
   for(let i=1;i<cur;i++){ctx.lineTo(pts[i].x,pts[i].y);}
+  ctx.strokeStyle="white";
   ctx.stroke();
  }
 }
@@ -193,66 +197,87 @@ function checkName(){
  }
 }
 
-/* 🫀 قلب واقعي */
+/* 🫀 FINAL HEART */
 let heart,drag=false,started=false,time=10,falling=false,vy=0;
 
 function initHeart(){
  heart=document.getElementById("heart");
 
- heart.onmousedown=startDrag;
- heart.ontouchstart=startDrag;
+ heart.addEventListener("mousedown", startDrag);
+ heart.addEventListener("touchstart", startDrag);
 
- document.onmouseup=stopDrag;
- document.ontouchend=stopDrag;
+ document.addEventListener("mousemove", moveHeart);
+ document.addEventListener("touchmove", moveHeart);
 
- document.onmousemove=moveHeart;
- document.ontouchmove=moveHeart;
+ document.addEventListener("mouseup", stopDrag);
+ document.addEventListener("touchend", stopDrag);
 }
 
 function startDrag(e){
  drag=true;
- if(!started){started=true;startTimer();}
+
+ if(!started){
+  started=true;
+  startTimer();
+ }
+
  e.preventDefault();
 }
 
+function moveHeart(e){
+ if(!drag) return;
+
+ let x = e.touches ? e.touches[0].clientX : e.clientX;
+ let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+ heart.style.left = x + "px";
+ heart.style.top = y + "px";
+}
+
 function stopDrag(){
+ if(!drag) return;
+
  drag=false;
  falling=true;
  fall();
 }
 
-function moveHeart(e){
- if(!drag) return;
- let x=e.touches?e.touches[0].clientX:e.clientX;
- let y=e.touches?e.touches[0].clientY:e.clientY;
- heart.style.left=x+"px";
- heart.style.top=y+"px";
-}
-
 function fall(){
  if(!falling) return;
- vy+=0.5;
- let top=heart.offsetTop+vy;
- heart.style.top=top+"px";
- if(top>window.innerHeight-50){breakHeart();return;}
+
+ vy += 0.7;
+ let top = heart.offsetTop + vy;
+
+ heart.style.top = top + "px";
+
+ if(top > window.innerHeight - 60){
+  breakHeart();
+  return;
+ }
+
  requestAnimationFrame(fall);
 }
 
 function breakHeart(){
- heart.style.background="darkred";
  heart.innerHTML="💔";
- setTimeout(()=>{alert("you broke my heart...");location.reload();},1000);
+ heart.style.background="darkred";
+
+ setTimeout(()=>{
+  alert("you broke my heart...");
+  location.reload();
+ },1200);
 }
 
 function startTimer(){
  let int=setInterval(()=>{
   time--;
   document.getElementById("timer").innerText=time;
+
   if(time<=0){
    clearInterval(int);
+
    let b5=document.getElementById("b5");
    b5.classList.add("active");
-   b5.onclick=()=>openScreen(5);
    openScreen(5);
   }
  },1000);
@@ -289,6 +314,7 @@ function yes(){
 
  let i=0;
  let el=document.getElementById("msg");
+
  let int=setInterval(()=>{
   el.innerHTML+=msg[i];
   i++;

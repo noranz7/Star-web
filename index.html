@@ -10,23 +10,24 @@ body{
  background:linear-gradient(135deg,#2b001f,#5a0f3d,#8a1c5a);
  color:white;
  font-family:monospace;
+ overflow:hidden;
 }
 
-/* 3D BOXES */
+/* 3D BOX */
 .box{
  padding:20px;
  margin:15px;
  background:#1a0012;
  border:1px solid #ff4da6;
- box-shadow:0 6px #660033, 0 0 10px #ff4da6 inset;
+ box-shadow:0 8px #660033, 0 0 15px #ff4da6 inset;
  cursor:pointer;
  transition:0.15s;
  opacity:0.4;
- border-radius:10px;
+ border-radius:12px;
 }
 .box.active{opacity:1}
 .box:active{
- transform:translateY(6px);
+ transform:translateY(8px);
  box-shadow:0 0 #660033;
 }
 
@@ -42,14 +43,14 @@ body{
  flex-direction:column;
 }
 
-/* قلب */
+/* heart */
 #heart{
  position:absolute;
  width:90px;
  height:90px;
  background:red;
  transform:rotate(-45deg);
- box-shadow:0 0 30px red;
+ box-shadow:0 0 40px red;
  cursor:grab;
 }
 #heart:before,#heart:after{
@@ -150,7 +151,12 @@ input,button{
 
 <script>
 
-/* فتح الشاشات */
+/* unlock audio */
+document.addEventListener("click",()=>{
+ document.querySelectorAll("audio").forEach(a=>a.load());
+},{once:true});
+
+/* open screen */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
@@ -161,7 +167,7 @@ function openScreen(n){
  if(n==6) glass.play();
 }
 
-/* ⭐ النجوم */
+/* ⭐ stars */
 let pts=[{x:80,y:120},{x:320,y:120},{x:200,y:230},{x:100,y:380},{x:300,y:380}];
 let cur=0,ctx;
 
@@ -210,26 +216,27 @@ function finishStars(){
  }
 }
 
-/* 🎂 */
+/* birthday */
 function checkBday(){
- if(document.getElementById("bday").value.includes("1")){
+ let v=document.getElementById("bday").value;
+ if(v.includes("1")){
   whisper.play();
   openScreen(3);
  }
 }
 
-/* 👤 */
+/* bbsf */
 function checkName(){
  let v=document.getElementById("name").value.toLowerCase().trim();
 
- if(v==="seif"||v==="saif"||v==="سيف"){
+ if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
   openScreen(4);
  }else{
   alert("wrong 👀");
  }
 }
 
-/* 🫀 القلب */
+/* heart */
 let heart,drag=false,started=false,time=10;
 
 function initHeart(){
@@ -239,7 +246,7 @@ function initHeart(){
   drag=true;
 
   if(!started){
-   heartbeat.play();
+   document.getElementById("heartbeat").play();
    startTimer();
    started=true;
   }
@@ -267,9 +274,9 @@ function startTimer(){
  },1000);
 }
 
-/* النهاية */
+/* message */
 function yes(){
- document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2;text-align:left'></div>";
+ document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2'></div>";
  document.getElementById("piano").play();
 
  let msg=`بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️

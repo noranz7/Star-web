@@ -48,7 +48,7 @@ input,button{
  border:1px solid #ff4da6;
 }
 
-/* 🫀 HEART */
+/* 🫀 */
 #heart{
  position:absolute;
  width:90px;
@@ -197,7 +197,7 @@ function checkName(){
  }
 }
 
-/* 🫀 FINAL HEART */
+/* 🫀 */
 let heart,drag=false,started=false,time=10,falling=false,vy=0;
 
 function initHeart(){
@@ -215,28 +215,22 @@ function initHeart(){
 
 function startDrag(e){
  drag=true;
-
- if(!started){
-  started=true;
-  startTimer();
- }
-
+ if(!started){started=true;startTimer();}
  e.preventDefault();
 }
 
 function moveHeart(e){
  if(!drag) return;
 
- let x = e.touches ? e.touches[0].clientX : e.clientX;
- let y = e.touches ? e.touches[0].clientY : e.clientY;
+ let x=e.touches?e.touches[0].clientX:e.clientX;
+ let y=e.touches?e.touches[0].clientY:e.clientY;
 
- heart.style.left = x + "px";
- heart.style.top = y + "px";
+ heart.style.left=x+"px";
+ heart.style.top=y+"px";
 }
 
 function stopDrag(){
  if(!drag) return;
-
  drag=false;
  falling=true;
  fall();
@@ -245,12 +239,12 @@ function stopDrag(){
 function fall(){
  if(!falling) return;
 
- vy += 0.7;
- let top = heart.offsetTop + vy;
+ vy+=0.7;
+ let top=heart.offsetTop+vy;
 
- heart.style.top = top + "px";
+ heart.style.top=top+"px";
 
- if(top > window.innerHeight - 60){
+ if(top>window.innerHeight-60){
   breakHeart();
   return;
  }
@@ -262,10 +256,17 @@ function breakHeart(){
  heart.innerHTML="💔";
  heart.style.background="darkred";
 
- setTimeout(()=>{
-  alert("you broke my heart...");
-  location.reload();
- },1200);
+ let msg=document.createElement("div");
+ msg.innerText="you broke my heart...";
+ msg.style.position="fixed";
+ msg.style.top="50%";
+ msg.style.left="50%";
+ msg.style.transform="translate(-50%,-50%)";
+ msg.style.fontSize="30px";
+
+ document.body.appendChild(msg);
+
+ setTimeout(()=>{location.reload();},2000);
 }
 
 function startTimer(){

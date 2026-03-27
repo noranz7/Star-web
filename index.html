@@ -7,7 +7,7 @@
 <style>
 body{
  margin:0;
- background:black;
+ background:linear-gradient(135deg,#2b001f,#5a0f3d,#8a1c5a);
  color:white;
  font-family:monospace;
 }
@@ -16,18 +16,19 @@ body{
 .box{
  padding:20px;
  margin:15px;
- background:#111;
- border:1px solid #444;
- box-shadow:0 6px #000;
+ background:#1a0012;
+ border:1px solid #ff4da6;
+ box-shadow:0 6px #660033, 0 0 10px #ff4da6 inset;
  cursor:pointer;
- transition:0.1s;
- opacity:0.3;
-}
-.box:active{
- transform:translateY(6px);
- box-shadow:0 0 #000;
+ transition:0.15s;
+ opacity:0.4;
+ border-radius:10px;
 }
 .box.active{opacity:1}
+.box:active{
+ transform:translateY(6px);
+ box-shadow:0 0 #660033;
+}
 
 .screen{
  display:none;
@@ -36,7 +37,6 @@ body{
  height:100%;
  top:0;
  left:0;
- background:black;
  justify-content:center;
  align-items:center;
  flex-direction:column;
@@ -64,6 +64,15 @@ body{
 #heart:after{left:45px;}
 
 canvas{border:1px solid white;}
+
+input,button{
+ padding:10px;
+ margin:10px;
+ background:black;
+ color:white;
+ border:1px solid #ff4da6;
+}
+
 </style>
 </head>
 
@@ -71,7 +80,7 @@ canvas{border:1px solid white;}
 
 <div class="box active" onclick="openScreen(1)">Connect the stars ⭐</div>
 <div class="box" id="b2">Birthday 🎂</div>
-<div class="box" id="b3">bbsf 👤</div>
+<div class="box" id="b3">Who's my bbsf 👤</div>
 <div class="box" id="b4">Hold me 🫀</div>
 <div class="box" id="b5">Reality 🌌</div>
 <div class="box" id="b6">Break 💔</div>
@@ -85,13 +94,13 @@ canvas{border:1px solid white;}
 
 <!-- 🎂 -->
 <div class="screen" id="s2">
-<input id="bday" placeholder="my birthday?">
+<input id="bday" placeholder="When is my birthday?">
 <button onclick="checkBday()">ok</button>
 </div>
 
 <!-- 👤 -->
 <div class="screen" id="s3">
-<input id="name" placeholder="who am I?">
+<input id="name" placeholder="Who's my bbsf?">
 <button onclick="checkName()">ok</button>
 </div>
 
@@ -113,7 +122,7 @@ canvas{border:1px solid white;}
 <button onclick="openScreen(6)">Continue</button>
 </div>
 
-<!-- 🔥 -->
+<!-- 💥 -->
 <div class="screen" id="s6">
 <button onclick="openScreen(7)">Break</button>
 </div>
@@ -132,16 +141,16 @@ canvas{border:1px solid white;}
 </div>
 
 <!-- AUDIO -->
-<audio id="song" src="./sounds/HIM - Join Me In Death.mp3"></audio>
-<audio id="heartbeat" src="./sounds/Heart Beat [SOUND EFFECT].mp3"></audio>
-<audio id="glitch" src="./sounds/Glitch Sound Effect.mp3"></audio>
-<audio id="glass" src="./sounds/Glass Breaking Sound Effect HD Glass Shattering Sound Effect.mp3"></audio>
-<audio id="whisper" src="./sounds/Four Voices Whispering _ Horror Film Sound Effects.mp3"></audio>
-<audio id="piano" src="./sounds/Low Sad Melody Sound Effect Emotional Piano Rebuil.mp3"></audio>
+<audio id="song" src="sounds/HIM - Join Me In Death.mp3"></audio>
+<audio id="heartbeat" src="sounds/Heart Beat [SOUND EFFECT].mp3"></audio>
+<audio id="glitch" src="sounds/Glitch Sound Effect.mp3"></audio>
+<audio id="glass" src="sounds/Glass Breaking Sound Effect HD Glass Shattering Sound Effect.mp3"></audio>
+<audio id="whisper" src="sounds/Four Voices Whispering _ Horror Film Sound Effects.mp3"></audio>
+<audio id="piano" src="sounds/Low Sad Melody Sound Effect Emotional Piano Rebuil.mp3"></audio>
 
 <script>
 
-/* فتح */
+/* فتح الشاشات */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
@@ -191,19 +200,19 @@ function draw(){
 
 function finishStars(){
  if(cur===pts.length){
-  song.play();
+  document.getElementById("song").play();
 
   setTimeout(()=>{
    let b2=document.getElementById("b2");
    b2.classList.add("active");
    b2.onclick=()=>openScreen(2);
-  },300000); // 5 دقايق
+  },300000);
  }
 }
 
 /* 🎂 */
 function checkBday(){
- if(bday.value.includes("1")){
+ if(document.getElementById("bday").value.includes("1")){
   whisper.play();
   openScreen(3);
  }
@@ -211,9 +220,12 @@ function checkBday(){
 
 /* 👤 */
 function checkName(){
- let v=name.value.toLowerCase();
- if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
+ let v=document.getElementById("name").value.toLowerCase().trim();
+
+ if(v==="seif"||v==="saif"||v==="سيف"){
   openScreen(4);
+ }else{
+  alert("wrong 👀");
  }
 }
 
@@ -246,7 +258,7 @@ function initHeart(){
 function startTimer(){
  let int=setInterval(()=>{
   time--;
-  timer.innerText=time;
+  document.getElementById("timer").innerText=time;
 
   if(time<=0){
    clearInterval(int);
@@ -258,7 +270,7 @@ function startTimer(){
 /* النهاية */
 function yes(){
  document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2;text-align:left'></div>";
- piano.play();
+ document.getElementById("piano").play();
 
  let msg=`بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️
 

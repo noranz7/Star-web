@@ -42,10 +42,7 @@ body{
   justify-content:center;
   align-items:center;
   flex-direction:column;
-}
-
-canvas{
-  background:black;
+  text-align:center;
 }
 </style>
 </head>
@@ -65,22 +62,24 @@ canvas{
 <!-- SCREENS -->
 
 <div class="screen" id="s1">
-<canvas id="stars" width="300" height="400"></canvas>
+<h2>Connect the stars</h2>
 <button onclick="closeStars()">Done</button>
 </div>
 
 <div class="screen" id="s2">
+<h2>When is my birthday?</h2>
 <input id="bday">
 <button onclick="checkBday()">Submit</button>
 </div>
 
 <div class="screen" id="s3">
+<h2>Who's my bbsf?</h2>
 <input id="name">
 <button onclick="checkName()">Submit</button>
 </div>
 
 <div class="screen" id="s4">
-<h2 id="heart">❤️</h2>
+<h2>❤️</h2>
 <p id="timer">10</p>
 </div>
 
@@ -101,13 +100,13 @@ canvas{
 </div>
 
 <!-- AUDIO -->
-<audio id="song" src="sounds/song.mp3"></audio>
-<audio id="vintage" src="sounds/vintage.mp3" loop></audio>
-<audio id="whisper" src="sounds/whisper.mp3" loop></audio>
-<audio id="heartbeat" src="sounds/heartbeat.mp3" loop></audio>
-<audio id="glitch" src="sounds/glitch.mp3" loop></audio>
-<audio id="glass" src="sounds/glass.mp3"></audio>
-<audio id="piano" src="sounds/piano.mp3" loop></audio>
+<audio id="song" src="sounds/HIM - Join Me In Death.mp3"></audio>
+<audio id="vintage" src="sounds/Film Projector Start Sound Effect.mp3" loop></audio>
+<audio id="whisper" src="sounds/Four Voices Whispering _ Horror Film Sound Effects.mp3" loop></audio>
+<audio id="heartbeat" src="sounds/Heart Beat [SOUND EFFECT].mp3" loop></audio>
+<audio id="glitch" src="sounds/Glitch Sound Effect.mp3" loop></audio>
+<audio id="glass" src="sounds/Glass Breaking Sound Effect HD Glass Shattering Sound Effect.mp3"></audio>
+<audio id="piano" src="sounds/Low Sad Melody Sound Effect Emotional Piano Rebuil.mp3" loop></audio>
 
 <script>
 
@@ -125,43 +124,20 @@ function openScreen(n){
  document.getElementById("s"+n).style.display="flex";
  stopAll();
 
- if(n==1) song.play();
- if(n==2) vintage.play();
- if(n==3) whisper.play();
+ if(n==1) document.getElementById("song").play();
+ if(n==2) document.getElementById("vintage").play();
+ if(n==3) document.getElementById("whisper").play();
  if(n==4) startHeart();
- if(n==5) glitch.play();
- if(n==6) glass.play();
- if(n==7) piano.play();
-}
-
-//// STARS
-let canvas=document.getElementById("stars");
-let ctx=canvas.getContext("2d");
-
-let points=[
- {x:50,y:50},{x:250,y:50},{x:150,y:200},{x:80,y:300},{x:220,y:300}
-];
-
-let connected=0;
-
-canvas.onclick=function(e){
- if(connected<points.length){
-   ctx.fillStyle="white";
-   ctx.beginPath();
-   ctx.arc(points[connected].x,points[connected].y,5,0,6.28);
-   ctx.fill();
-   connected++;
- }
+ if(n==5) document.getElementById("glitch").play();
+ if(n==6) document.getElementById("glass").play();
+ if(n==7) document.getElementById("piano").play();
 }
 
 function closeStars(){
- if(connected>=points.length){
-   document.getElementById("s1").style.display="none";
-   unlock(2);
- }
+ document.getElementById("s1").style.display="none";
+ unlock(2);
 }
 
-//// BDAY
 function checkBday(){
  let v=document.getElementById("bday").value.toLowerCase();
  if(v.includes("1") && v.includes("1")){
@@ -170,7 +146,6 @@ function checkBday(){
  }
 }
 
-//// NAME
 function checkName(){
  let v=document.getElementById("name").value.toLowerCase();
  if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
@@ -179,7 +154,6 @@ function checkName(){
  }
 }
 
-//// HEART
 let time=10,interval;
 
 function startHeart(){
@@ -196,19 +170,25 @@ function startHeart(){
  },1000);
 }
 
-//// FINAL
 function yes(){
- document.body.innerHTML="(بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك
+document.body.innerHTML=`
+<div style="padding:20px;max-width:700px;margin:auto;line-height:2;text-align:left">
 
-بجد أنا معرفش، انت الوحيد اللي أنا بتعب عشانه وبحاول افرحه، لأن بجد فرحتك بتفرحني اوي، أنا ساعات بخاف اني اكون ببذل جهد ملهوش اي لازمة او شيء لا يذكر يعني ومش بيفرحك، فا بحاول يعني اعمل اي حاجة أنا بعرف اعملها، أنا عملتلك الويب ده مخصوص عشان اعبرلك عن مشاعري فيه، قعدت فالويب ده كتير فشخ بس والله فداك، ياسيوفتيتيتيتيتي انت بجد تستحق كل حاجة جميلة، أنا بجد مكنتش اعرف أنا ازاي عايشة منغير ما كنت اعرف انسان كتكوت زيك بجد؟؟؟؟، انا اصلا مستغربة فشخ أن في ناس بتسيبك، دول ناس ناقصة عقل والله ومرضى، هما بس عشان شايفينك مختلف عنهم، ببكييي بجددد انت الطف حد أنا شوفته فحياتي كلها، اوعدك اني هفضل معاك دايمًا وزي ما قولتلك فالاول together in death، عمري ماهسيبك، كل لحظة بيننا بجد عسولة اوي وانا فرحانة انك كملت الويب لحد هناا، بجد بحب اتكلم معاك اوي ومش بحس بالوقت وهو بيعدي، بتفرحني بجد، شكلك عسول اوي ماشاء الله تبارك الرحمـٰن، وضحكتك عسولة اوي اوي اوي، كل حاجة فيك عسل بجد
-أنتَ الكمالُ إذا تجلّى نورهُ
-وإذا حضرتَ، توارى النقصُ خجلانَا
-فيك الجمالُ كأنّه متجسّدٌ
-حتى ظننتُ الحسنَ فيك أوطانَا
-لو قيلَ، صفْ معنى الكمالِ، لقلتُهُ
-وجهٌ أراكَ به، وقلبٌ ما هَوانَا، يا سيفُ قلبي، أترىٰ هيامي ؟
+بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️<br><br>
 
-كتبت الشِعر ده ليك بجد كتعبير، أنا يمكن مهاراتي قلت شوية فالشِعر بس حاولت عشانك، بجد ربنا يديمك ليا بجد انت مش متخيل فرحتي بجد وانت معايا، بحب اشاركك كل حاجة بجد ومش بحس اني تافهة وبحب كونك بتفهمني وبتشاركني تفاهتي، حرفيًا انت انا بس الفرق انك ولد وأنا بنت، أنا بجد محظوظة اوي انك فحياتي 3>.)";
+بجد أنا معرفش، انت الوحيد اللي أنا بتعب عشانه وبحاول افرحه، لأن بجد فرحتك بتفرحني اوي، أنا ساعات بخاف اني اكون ببذل جهد ملهوش اي لازمة او شيء لا يذكر يعني ومش بيفرحك، فا بحاول يعني اعمل اي حاجة أنا بعرف اعملها، أنا عملتلك الويب ده مخصوص عشان اعبرلك عن مشاعري فيه، قعدت فالويب ده كتير فشخ بس والله فداك، ياسيوفتيتيتيتيتي انت بجد تستحق كل حاجة جميلة، أنا بجد مكنتش اعرف أنا ازاي عايشة منغير ما كنت اعرف انسان كتكوت زيك بجد؟؟؟؟، انا اصلا مستغربة فشخ أن في ناس بتسيبك، دول ناس ناقصة عقل والله ومرضى، هما بس عشان شايفينك مختلف عنهم، ببكييي بجددد انت الطف حد أنا شوفته فحياتي كلها، اوعدك اني هفضل معاك دايمًا وزي ما قولتلك فالاول together in death، عمري ماهسيبك، كل لحظة بيننا بجد عسولة اوي وانا فرحانة انك كملت الويب لحد هناا، بجد بحب اتكلم معاك اوي ومش بحس بالوقت وهو بيعدي، بتفرحني بجد، شكلك عسول اوي ماشاء الله تبارك الرحمـٰن، وضحكتك عسولة اوي اوي اوي، كل حاجة فيك عسل بجد <br><br>
+
+أنتَ الكمالُ إذا تجلّى نورهُ  
+وإذا حضرتَ، توارى النقصُ خجلانَا  
+فيك الجمالُ كأنّه متجسّدٌ  
+حتى ظننتُ الحسنَ فيك أوطانَا  
+لو قيلَ، صفْ معنى الكمالِ، لقلتُهُ  
+وجهٌ أراكَ به، وقلبٌ ما هَوانَا، يا سيفُ قلبي، أترىٰ هيامي ؟ <br><br>
+
+كتبت الشِعر ده ليك بجد كتعبير، أنا يمكن مهاراتي قلت شوية فالشِعر بس حاولت عشانك، بجد ربنا يديمك ليا بجد انت مش متخيل فرحتي بجد وانت معايا، بحب اشاركك كل حاجة بجد ومش بحس اني تافهة وبحب كونك بتفهمني وبتشاركني تفاهتي، حرفيًا انت انا بس الفرق انك ولد وأنا بنت، أنا بجد محظوظة اوي انك فحياتي 3&gt;.
+
+</div>
+`;
 }
 
 function no(){

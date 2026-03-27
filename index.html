@@ -70,7 +70,10 @@ body{
  100%{transform:rotate(-45deg) scale(1);}
 }
 
-canvas{background:black;}
+canvas{
+ background:black;
+ border:1px solid white;
+}
 </style>
 </head>
 
@@ -86,9 +89,9 @@ canvas{background:black;}
 <div class="box" id="b7">Final 🌹</div>
 </div>
 
-<!-- ⭐ -->
+<!-- ⭐ النجوم -->
 <div class="screen" id="s1">
-<canvas id="stars" width="300" height="400"></canvas>
+<canvas id="stars" width="400" height="500"></canvas>
 <button onclick="finishStars()">Continue</button>
 </div>
 
@@ -165,37 +168,39 @@ function openScreen(n){
  if(n==7) piano.play();
 }
 
-/* ⭐ النجوم */
-let c, ctx, pts, cur;
+/* ⭐ النجوم (مضمون يشتغل) */
+let pts = [
+ {x:80,y:120},{x:320,y:120},
+ {x:200,y:230},{x:100,y:380},{x:300,y:380}
+];
 
-window.onload = function(){
- c=document.getElementById("stars");
- ctx=c.getContext("2d");
+let cur = 0;
+let ctx;
 
- pts=[
-  {x:50,y:100},{x:250,y:100},
-  {x:150,y:200},{x:80,y:300},{x:220,y:300}
- ];
+function initStars(){
+ let c = document.getElementById("stars");
+ if(!c) return;
 
- cur=0;
-
+ ctx = c.getContext("2d");
  draw();
 
- c.onclick=function(){
-  if(cur<pts.length){
+ c.addEventListener("click", ()=>{
+  if(cur < pts.length){
    cur++;
    draw();
   }
- };
-};
+ });
+}
 
 function draw(){
- ctx.clearRect(0,0,300,400);
+ if(!ctx) return;
+
+ ctx.clearRect(0,0,400,500);
 
  pts.forEach(p=>{
   ctx.beginPath();
   ctx.fillStyle="white";
-  ctx.arc(p.x,p.y,5,0,Math.PI*2);
+  ctx.arc(p.x,p.y,6,0,Math.PI*2);
   ctx.fill();
  });
 
@@ -213,15 +218,16 @@ function draw(){
  }
 }
 
-function finishStars(){
- if(cur===pts.length){
-  document.getElementById("song").play();
+document.addEventListener("DOMContentLoaded", initStars);
 
+function finishStars(){
+ if(cur === pts.length){
+  document.getElementById("song").play();
   document.getElementById("s1").style.display="none";
 
-  let b2=document.getElementById("b2");
+  let b2 = document.getElementById("b2");
   b2.classList.add("active");
-  b2.onclick=()=>openScreen(2);
+  b2.onclick = ()=>openScreen(2);
  }
 }
 

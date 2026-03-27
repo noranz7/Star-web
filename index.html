@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -12,7 +12,7 @@ body{
  font-family:monospace;
 }
 
-/* 3D BOX */
+/* 3D */
 .box{
  padding:20px;
  margin:12px;
@@ -52,6 +52,8 @@ input,button{
  border:1px solid #ff4da6;
 }
 
+audio{margin-top:20px;}
+
 /* قلب */
 #heart{
  position:absolute;
@@ -73,14 +75,12 @@ input,button{
 }
 #heart:before{top:-45px;}
 #heart:after{left:45px;}
-
-audio{margin-top:20px;}
 </style>
 </head>
 
 <body>
 
-<!-- 7 خانات -->
+<!-- الخانات -->
 <div class="box active" onclick="openScreen(1)">Connect the stars ⭐</div>
 <div class="box" id="b2">Birthday 🎂</div>
 <div class="box" id="b3">Who's my bbsf 👤</div>
@@ -95,7 +95,7 @@ audio{margin-top:20px;}
 <button onclick="finishStars()">Continue</button>
 
 <audio id="song" controls style="display:none">
-<source src="sounds/HIM - Join Me In Death.mp3">
+<source src="./sounds/HIM - Join Me In Death.mp3" type="audio/mpeg">
 </audio>
 </div>
 
@@ -182,12 +182,18 @@ function draw(){
  }
 }
 
+/* ⭐ الحل */
 function finishStars(){
+
  document.getElementById("song").style.display="block";
+
+ document.getElementById("stars").style.display="none";
 
  let b2=document.getElementById("b2");
  b2.classList.add("active");
  b2.onclick=()=>openScreen(2);
+
+ openScreen(2);
 }
 
 /* 🎂 */

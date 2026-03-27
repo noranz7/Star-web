@@ -10,18 +10,17 @@ body{
  background:linear-gradient(135deg,#2b001f,#5a0f3d,#8a1c5a);
  color:white;
  font-family:monospace;
- overflow:hidden;
 }
 
-/* 3D BOX */
+/* 3D */
 .box{
  padding:20px;
  margin:15px;
  background:#1a0012;
  border:1px solid #ff4da6;
- box-shadow:0 8px #660033, 0 0 15px #ff4da6 inset;
+ box-shadow:0 8px #660033;
  cursor:pointer;
- transition:0.15s;
+ transition:0.1s;
  opacity:0.4;
  border-radius:12px;
 }
@@ -43,15 +42,15 @@ body{
  flex-direction:column;
 }
 
-/* heart */
+/* قلب */
 #heart{
  position:absolute;
  width:90px;
  height:90px;
  background:red;
- transform:rotate(-45deg);
- box-shadow:0 0 40px red;
- cursor:grab;
+ transform:translate(-50%,-50%) rotate(-45deg);
+ left:50%;
+ top:50%;
 }
 #heart:before,#heart:after{
  content:'';
@@ -73,7 +72,6 @@ input,button{
  color:white;
  border:1px solid #ff4da6;
 }
-
 </style>
 </head>
 
@@ -83,14 +81,16 @@ input,button{
 <div class="box" id="b2">Birthday 🎂</div>
 <div class="box" id="b3">Who's my bbsf 👤</div>
 <div class="box" id="b4">Hold me 🫀</div>
-<div class="box" id="b5">Reality 🌌</div>
-<div class="box" id="b6">Break 💔</div>
-<div class="box" id="b7">Final 🌹</div>
+<div class="box" id="b5">Final 🌹</div>
 
 <!-- ⭐ -->
 <div class="screen" id="s1">
 <canvas id="stars" width="400" height="500"></canvas>
-<button onclick="finishStars()">Continue</button>
+<button onclick="finishStars()">Done</button>
+
+<div id="songBox" style="display:none">
+<button onclick="playSong()">Play our song 🖤</button>
+</div>
 </div>
 
 <!-- 🎂 -->
@@ -111,63 +111,25 @@ input,button{
 <p id="timer">10</p>
 </div>
 
-<!-- 💔 -->
-<div class="screen" id="fail">
-<h1>u broke my heart</h1>
-<button onclick="location.reload()">Restart</button>
-</div>
-
-<!-- 🌌 -->
-<div class="screen" id="s5">
-<h2>we were okay...</h2>
-<button onclick="openScreen(6)">Continue</button>
-</div>
-
-<!-- 💥 -->
-<div class="screen" id="s6">
-<button onclick="openScreen(7)">Break</button>
-</div>
-
 <!-- 🌹 -->
-<div class="screen" id="s7">
-<h2>Do you feel it too?</h2>
-<button onclick="yes()">Yes</button>
-<button onclick="no()">No</button>
+<div class="screen" id="s5">
+<button onclick="yes()">Open 💌</button>
 </div>
 
-<!-- ❌ -->
-<div class="screen" id="noScreen">
-<h1>Then why are u still here?</h1>
-<button onclick="location.reload()">Restart</button>
-</div>
-
-<!-- AUDIO -->
 <audio id="song" src="sounds/HIM - Join Me In Death.mp3"></audio>
-<audio id="heartbeat" src="sounds/Heart Beat [SOUND EFFECT].mp3"></audio>
-<audio id="glitch" src="sounds/Glitch Sound Effect.mp3"></audio>
-<audio id="glass" src="sounds/Glass Breaking Sound Effect HD Glass Shattering Sound Effect.mp3"></audio>
-<audio id="whisper" src="sounds/Four Voices Whispering _ Horror Film Sound Effects.mp3"></audio>
-<audio id="piano" src="sounds/Low Sad Melody Sound Effect Emotional Piano Rebuil.mp3"></audio>
 
 <script>
 
-/* unlock audio */
-document.addEventListener("click",()=>{
- document.querySelectorAll("audio").forEach(a=>a.load());
-},{once:true});
-
-/* open screen */
+/* فتح */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
 
  if(n==1) setTimeout(initStars,100);
  if(n==4) setTimeout(initHeart,100);
- if(n==5) glitch.play();
- if(n==6) glass.play();
 }
 
-/* ⭐ stars */
+/* ⭐ النجوم */
 let pts=[{x:80,y:120},{x:320,y:120},{x:200,y:230},{x:100,y:380},{x:300,y:380}];
 let cur=0,ctx;
 
@@ -206,28 +168,28 @@ function draw(){
 
 function finishStars(){
  if(cur===pts.length){
-  document.getElementById("song").play();
+  document.getElementById("songBox").style.display="block";
 
-  setTimeout(()=>{
-   let b2=document.getElementById("b2");
-   b2.classList.add("active");
-   b2.onclick=()=>openScreen(2);
-  },300000);
+  let b2=document.getElementById("b2");
+  b2.classList.add("active");
+  b2.onclick=()=>openScreen(2);
  }
 }
 
-/* birthday */
+function playSong(){
+ document.getElementById("song").play();
+}
+
+/* 🎂 */
 function checkBday(){
- let v=document.getElementById("bday").value;
- if(v.includes("1")){
-  whisper.play();
+ if(document.getElementById("bday").value.includes("1")){
   openScreen(3);
  }
 }
 
-/* bbsf */
+/* 👤 */
 function checkName(){
- let v=document.getElementById("name").value.toLowerCase().trim();
+ let v=document.getElementById("name").value.toLowerCase();
 
  if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
   openScreen(4);
@@ -236,7 +198,7 @@ function checkName(){
  }
 }
 
-/* heart */
+/* 🫀 */
 let heart,drag=false,started=false,time=10;
 
 function initHeart(){
@@ -244,9 +206,7 @@ function initHeart(){
 
  heart.onmousedown=()=>{
   drag=true;
-
   if(!started){
-   document.getElementById("heartbeat").play();
    startTimer();
    started=true;
   }
@@ -274,10 +234,9 @@ function startTimer(){
  },1000);
 }
 
-/* message */
+/* 💌 الرسالة */
 function yes(){
  document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2'></div>";
- document.getElementById("piano").play();
 
  let msg=`بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️
 
@@ -300,10 +259,6 @@ function yes(){
   i++;
   if(i>=msg.length) clearInterval(int);
  },20);
-}
-
-function no(){
- document.getElementById("noScreen").style.display="flex";
 }
 
 </script>

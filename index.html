@@ -25,10 +25,11 @@ body{
  margin:10px 0;
  opacity:0.3;
  cursor:pointer;
- transition:0.5s;
+ transition:0.4s;
 }
 .box.active{opacity:1}
 
+/* screens */
 .screen{
  position:fixed;
  top:0;left:0;
@@ -42,7 +43,7 @@ body{
  text-align:center;
 }
 
-/* قلب واقعي */
+/* heart */
 #heart{
  position:absolute;
  width:80px;
@@ -50,7 +51,7 @@ body{
  background:red;
  transform:rotate(-45deg);
  cursor:grab;
- box-shadow:0 0 30px red;
+ box-shadow:0 0 25px red;
  animation:beat 1s infinite;
 }
 
@@ -62,7 +63,6 @@ body{
  background:red;
  border-radius:50%;
 }
-
 #heart::before{top:-40px;}
 #heart::after{left:40px;}
 
@@ -70,6 +70,10 @@ body{
  0%{transform:rotate(-45deg) scale(1);}
  50%{transform:rotate(-45deg) scale(1.1);}
  100%{transform:rotate(-45deg) scale(1);}
+}
+
+canvas{
+ background:black;
 }
 </style>
 </head>
@@ -86,55 +90,57 @@ body{
 <div class="box" id="b7">Final 🌹</div>
 </div>
 
-<!-- النجوم -->
+<!-- ⭐ STARS -->
 <div class="screen" id="s1">
 <canvas id="stars" width="300" height="400"></canvas>
 <button onclick="finishStars()">Continue</button>
 </div>
 
-<!-- عيد ميلاد -->
+<!-- 🎂 -->
 <div class="screen" id="s2">
+<h2>When is my birthday?</h2>
 <input id="bday">
 <button onclick="checkBday()">Submit</button>
 </div>
 
-<!-- الاسم -->
+<!-- 👤 -->
 <div class="screen" id="s3">
+<h2>Who's my bbsf?</h2>
 <input id="name">
 <button onclick="checkName()">Submit</button>
 </div>
 
-<!-- القلب -->
+<!-- 🫀 -->
 <div class="screen" id="s4">
 <div id="heart"></div>
 <p id="timer">10</p>
 </div>
 
-<!-- فشل -->
+<!-- 💔 -->
 <div class="screen" id="fail">
 <h1>u broke my heart</h1>
 <button onclick="location.reload()">Restart</button>
 </div>
 
-<!-- reality -->
+<!-- 🌌 -->
 <div class="screen" id="s5">
 <h2>we were okay...</h2>
 <button onclick="next6()">Continue</button>
 </div>
 
-<!-- كسر -->
+<!-- 🔥 -->
 <div class="screen" id="s6">
 <button onclick="next7()">Break</button>
 </div>
 
-<!-- النهاية -->
+<!-- 🌹 -->
 <div class="screen" id="s7">
 <h2>Do you feel it too?</h2>
 <button onclick="yes()">Yes</button>
 <button onclick="no()">No</button>
 </div>
 
-<!-- no -->
+<!-- ❌ -->
 <div class="screen" id="noScreen">
 <h1>Then why are u still here?</h1>
 <button onclick="location.reload()">Restart</button>
@@ -151,7 +157,7 @@ body{
 
 <script>
 
-/* فتح شاشة */
+/* open screen */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
@@ -163,7 +169,7 @@ function openScreen(n){
  if(n==7) piano.play();
 }
 
-/* النجوم */
+/* ⭐ stars */
 let c=document.getElementById("stars");
 let ctx=c.getContext("2d");
 
@@ -176,14 +182,17 @@ let cur=0;
 
 function draw(){
  ctx.clearRect(0,0,300,400);
+
  pts.forEach(p=>{
   ctx.beginPath();
+  ctx.fillStyle="white";
   ctx.arc(p.x,p.y,5,0,6.28);
   ctx.fill();
  });
 
  if(cur>0){
   ctx.beginPath();
+  ctx.strokeStyle="white";
   ctx.moveTo(pts[0].x,pts[0].y);
   for(let i=1;i<cur;i++){
     ctx.lineTo(pts[i].x,pts[i].y);
@@ -192,6 +201,8 @@ function draw(){
  }
 }
 
+window.onload=draw;
+
 c.onclick=()=>{
  if(cur<pts.length){
   cur++;
@@ -199,18 +210,17 @@ c.onclick=()=>{
  }
 }
 
-draw();
-
 function finishStars(){
- if(cur==pts.length){
-  song.play();
+ if(cur===pts.length){
+  document.getElementById("song").play();
   document.getElementById("s1").style.display="none";
+
   document.getElementById("b2").classList.add("active");
   document.getElementById("b2").onclick=()=>openScreen(2);
  }
 }
 
-/* عيد ميلاد */
+/* 🎂 */
 function checkBday(){
  let v=bday.value.toLowerCase();
  if(v.includes("1")){
@@ -218,7 +228,7 @@ function checkBday(){
  }
 }
 
-/* الاسم */
+/* 👤 */
 function checkName(){
  let v=name.value.toLowerCase();
  if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
@@ -226,7 +236,7 @@ function checkName(){
  }
 }
 
-/* القلب */
+/* 🫀 heart */
 let heart=document.getElementById("heart");
 let drag=false,started=false,time=10;
 
@@ -269,11 +279,11 @@ setInterval(()=>{
    document.getElementById("fail").style.display="flex";
   }
  }
-},50);
+},40);
 
-/* باقي */
-function next6(){ openScreen(6); }
-function next7(){ openScreen(7); }
+/* rest */
+function next6(){openScreen(6);}
+function next7(){openScreen(7);}
 
 /* typing */
 function type(text,el){
@@ -286,8 +296,8 @@ function type(text,el){
 }
 
 function yes(){
- document.body.innerHTML="<div id='msg' style='padding:20px;line-height:2;max-width:700px;margin:auto;text-align:left'></div>";
- piano.play();
+ document.body.innerHTML="<div id='msg' style='padding:20px;max-width:700px;margin:auto;line-height:2;text-align:left'></div>";
+ document.getElementById("piano").play();
 
  let msg=`بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك ❤️
 

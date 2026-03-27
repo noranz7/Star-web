@@ -29,7 +29,6 @@ body{
 }
 .box.active{opacity:1}
 
-/* screens */
 .screen{
  position:fixed;
  top:0;left:0;
@@ -43,7 +42,7 @@ body{
  text-align:center;
 }
 
-/* heart */
+/* قلب */
 #heart{
  position:absolute;
  width:80px;
@@ -54,7 +53,6 @@ body{
  box-shadow:0 0 25px red;
  animation:beat 1s infinite;
 }
-
 #heart::before,#heart::after{
  content:'';
  position:absolute;
@@ -72,9 +70,7 @@ body{
  100%{transform:rotate(-45deg) scale(1);}
 }
 
-canvas{
- background:black;
-}
+canvas{background:black;}
 </style>
 </head>
 
@@ -90,7 +86,7 @@ canvas{
 <div class="box" id="b7">Final 🌹</div>
 </div>
 
-<!-- ⭐ STARS -->
+<!-- ⭐ -->
 <div class="screen" id="s1">
 <canvas id="stars" width="300" height="400"></canvas>
 <button onclick="finishStars()">Continue</button>
@@ -157,7 +153,7 @@ canvas{
 
 <script>
 
-/* open screen */
+/* فتح شاشة */
 function openScreen(n){
  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
  document.getElementById("s"+n).style.display="flex";
@@ -169,16 +165,29 @@ function openScreen(n){
  if(n==7) piano.play();
 }
 
-/* ⭐ stars */
-let c=document.getElementById("stars");
-let ctx=c.getContext("2d");
+/* ⭐ النجوم */
+let c, ctx, pts, cur;
 
-let pts=[
-{x:50,y:100},{x:250,y:100},
-{x:150,y:200},{x:80,y:300},{x:220,y:300}
-];
+window.onload = function(){
+ c=document.getElementById("stars");
+ ctx=c.getContext("2d");
 
-let cur=0;
+ pts=[
+  {x:50,y:100},{x:250,y:100},
+  {x:150,y:200},{x:80,y:300},{x:220,y:300}
+ ];
+
+ cur=0;
+
+ draw();
+
+ c.onclick=function(){
+  if(cur<pts.length){
+   cur++;
+   draw();
+  }
+ };
+};
 
 function draw(){
  ctx.clearRect(0,0,300,400);
@@ -186,37 +195,33 @@ function draw(){
  pts.forEach(p=>{
   ctx.beginPath();
   ctx.fillStyle="white";
-  ctx.arc(p.x,p.y,5,0,6.28);
+  ctx.arc(p.x,p.y,5,0,Math.PI*2);
   ctx.fill();
  });
 
  if(cur>0){
   ctx.beginPath();
   ctx.strokeStyle="white";
+  ctx.lineWidth=2;
   ctx.moveTo(pts[0].x,pts[0].y);
+
   for(let i=1;i<cur;i++){
     ctx.lineTo(pts[i].x,pts[i].y);
   }
+
   ctx.stroke();
- }
-}
-
-window.onload=draw;
-
-c.onclick=()=>{
- if(cur<pts.length){
-  cur++;
-  draw();
  }
 }
 
 function finishStars(){
  if(cur===pts.length){
   document.getElementById("song").play();
+
   document.getElementById("s1").style.display="none";
 
-  document.getElementById("b2").classList.add("active");
-  document.getElementById("b2").onclick=()=>openScreen(2);
+  let b2=document.getElementById("b2");
+  b2.classList.add("active");
+  b2.onclick=()=>openScreen(2);
  }
 }
 
@@ -236,7 +241,7 @@ function checkName(){
  }
 }
 
-/* 🫀 heart */
+/* 🫀 */
 let heart=document.getElementById("heart");
 let drag=false,started=false,time=10;
 
@@ -281,7 +286,7 @@ setInterval(()=>{
  }
 },40);
 
-/* rest */
+/* باقي */
 function next6(){openScreen(6);}
 function next7(){openScreen(7);}
 

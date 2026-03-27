@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You</title>
+
+<style>
+body{
+  margin:0;
+  background:black;
+  color:white;
+  font-family:monospace;
+}
+
+.container{
+  width:90%;
+  margin:auto;
+  padding-top:50px;
+}
+
+.box{
+  width:100%;
+  padding:20px;
+  border:1px solid white;
+  margin:15px 0;
+  cursor:pointer;
+  opacity:0.3;
+  transition:0.5s;
+}
+
+.box.active{
+  opacity:1;
+}
+
+.screen{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+canvas{
+  background:black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="box active" onclick="openScreen(1)">Connect the stars ⭐</div>
+  <div class="box" id="b2">When is my birthday?</div>
+  <div class="box" id="b3">Who's my bbsf?</div>
+  <div class="box" id="b4">Hold my heart 🫀</div>
+  <div class="box" id="b5">Another reality 🌌</div>
+  <div class="box" id="b6">Break it 🔥</div>
+  <div class="box" id="b7">Final 🌹</div>
+</div>
+
+<!-- SCREENS -->
+
+<div class="screen" id="s1">
+<canvas id="stars" width="300" height="400"></canvas>
+<button onclick="closeStars()">Done</button>
+</div>
+
+<div class="screen" id="s2">
+<input id="bday">
+<button onclick="checkBday()">Submit</button>
+</div>
+
+<div class="screen" id="s3">
+<input id="name">
+<button onclick="checkName()">Submit</button>
+</div>
+
+<div class="screen" id="s4">
+<h2 id="heart">❤️</h2>
+<p id="timer">10</p>
+</div>
+
+<div class="screen" id="fail">
+<h1>u broke my heart</h1>
+<button onclick="location.reload()">Restart</button>
+</div>
+
+<div class="screen" id="noScreen">
+<h1>Then why are u still here?</h1>
+<button onclick="location.reload()">Restart</button>
+</div>
+
+<div class="screen" id="final">
+<h2>Do you feel it too?</h2>
+<button onclick="yes()">Yes</button>
+<button onclick="no()">No</button>
+</div>
+
+<!-- AUDIO -->
+<audio id="song" src="sounds/song.mp3"></audio>
+<audio id="vintage" src="sounds/vintage.mp3" loop></audio>
+<audio id="whisper" src="sounds/whisper.mp3" loop></audio>
+<audio id="heartbeat" src="sounds/heartbeat.mp3" loop></audio>
+<audio id="glitch" src="sounds/glitch.mp3" loop></audio>
+<audio id="glass" src="sounds/glass.mp3"></audio>
+<audio id="piano" src="sounds/piano.mp3" loop></audio>
+
+<script>
+
+function stopAll(){
+ document.querySelectorAll("audio").forEach(a=>{a.pause();a.currentTime=0;});
+}
+
+function unlock(n){
+ document.getElementById("b"+n).classList.add("active");
+ document.getElementById("b"+n).onclick=()=>openScreen(n);
+}
+
+function openScreen(n){
+ document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
+ document.getElementById("s"+n).style.display="flex";
+ stopAll();
+
+ if(n==1) song.play();
+ if(n==2) vintage.play();
+ if(n==3) whisper.play();
+ if(n==4) startHeart();
+ if(n==5) glitch.play();
+ if(n==6) glass.play();
+ if(n==7) piano.play();
+}
+
+//// STARS
+let canvas=document.getElementById("stars");
+let ctx=canvas.getContext("2d");
+
+let points=[
+ {x:50,y:50},{x:250,y:50},{x:150,y:200},{x:80,y:300},{x:220,y:300}
+];
+
+let connected=0;
+
+canvas.onclick=function(e){
+ if(connected<points.length){
+   ctx.fillStyle="white";
+   ctx.beginPath();
+   ctx.arc(points[connected].x,points[connected].y,5,0,6.28);
+   ctx.fill();
+   connected++;
+ }
+}
+
+function closeStars(){
+ if(connected>=points.length){
+   document.getElementById("s1").style.display="none";
+   unlock(2);
+ }
+}
+
+//// BDAY
+function checkBday(){
+ let v=document.getElementById("bday").value.toLowerCase();
+ if(v.includes("1") && v.includes("1")){
+   document.getElementById("s2").style.display="none";
+   unlock(3);
+ }
+}
+
+//// NAME
+function checkName(){
+ let v=document.getElementById("name").value.toLowerCase();
+ if(v.includes("سيف")||v.includes("seif")||v.includes("saif")){
+   document.getElementById("s3").style.display="none";
+   unlock(4);
+ }
+}
+
+//// HEART
+let time=10,interval;
+
+function startHeart(){
+ document.getElementById("heartbeat").play();
+ time=10;
+ interval=setInterval(()=>{
+   time--;
+   document.getElementById("timer").innerText=time;
+   if(time<=0){
+     clearInterval(interval);
+     document.getElementById("s4").style.display="none";
+     unlock(5);
+   }
+ },1000);
+}
+
+//// FINAL
+function yes(){
+ document.body.innerHTML="(بما انك اخترت ”ايوة“، فا ديه هتبقى هابي ماسدج عسولة زيك، ليككك مش لحد غيرك
+
+بجد أنا معرفش، انت الوحيد اللي أنا بتعب عشانه وبحاول افرحه، لأن بجد فرحتك بتفرحني اوي، أنا ساعات بخاف اني اكون ببذل جهد ملهوش اي لازمة او شيء لا يذكر يعني ومش بيفرحك، فا بحاول يعني اعمل اي حاجة أنا بعرف اعملها، أنا عملتلك الويب ده مخصوص عشان اعبرلك عن مشاعري فيه، قعدت فالويب ده كتير فشخ بس والله فداك، ياسيوفتيتيتيتيتي انت بجد تستحق كل حاجة جميلة، أنا بجد مكنتش اعرف أنا ازاي عايشة منغير ما كنت اعرف انسان كتكوت زيك بجد؟؟؟؟، انا اصلا مستغربة فشخ أن في ناس بتسيبك، دول ناس ناقصة عقل والله ومرضى، هما بس عشان شايفينك مختلف عنهم، ببكييي بجددد انت الطف حد أنا شوفته فحياتي كلها، اوعدك اني هفضل معاك دايمًا وزي ما قولتلك فالاول together in death، عمري ماهسيبك، كل لحظة بيننا بجد عسولة اوي وانا فرحانة انك كملت الويب لحد هناا، بجد بحب اتكلم معاك اوي ومش بحس بالوقت وهو بيعدي، بتفرحني بجد، شكلك عسول اوي ماشاء الله تبارك الرحمـٰن، وضحكتك عسولة اوي اوي اوي، كل حاجة فيك عسل بجد
+أنتَ الكمالُ إذا تجلّى نورهُ
+وإذا حضرتَ، توارى النقصُ خجلانَا
+فيك الجمالُ كأنّه متجسّدٌ
+حتى ظننتُ الحسنَ فيك أوطانَا
+لو قيلَ، صفْ معنى الكمالِ، لقلتُهُ
+وجهٌ أراكَ به، وقلبٌ ما هَوانَا، يا سيفُ قلبي، أترىٰ هيامي ؟
+
+كتبت الشِعر ده ليك بجد كتعبير، أنا يمكن مهاراتي قلت شوية فالشِعر بس حاولت عشانك، بجد ربنا يديمك ليا بجد انت مش متخيل فرحتي بجد وانت معايا، بحب اشاركك كل حاجة بجد ومش بحس اني تافهة وبحب كونك بتفهمني وبتشاركني تفاهتي، حرفيًا انت انا بس الفرق انك ولد وأنا بنت، أنا بجد محظوظة اوي انك فحياتي 3>.)";
+}
+
+function no(){
+ document.getElementById("noScreen").style.display="flex";
+}
+
+</script>
+
+</body>
+</html>

@@ -12,7 +12,7 @@ body{
  font-family:monospace;
 }
 
-/* 3D */
+/* 3D BOX */
 .box{
  padding:20px;
  margin:15px;
@@ -86,7 +86,7 @@ input,button{
 <!-- ⭐ -->
 <div class="screen" id="s1">
 <canvas id="stars" width="400" height="500"></canvas>
-<button onclick="finishStars()">Done</button>
+<button onclick="finishStars()">Continue</button>
 
 <div id="songBox" style="display:none">
 <button onclick="playSong()">Play our song 🖤</button>
@@ -166,18 +166,19 @@ function draw(){
  }
 }
 
+/* ⭐ الحل النهائي */
 function finishStars(){
- if(cur===pts.length){
-  document.getElementById("songBox").style.display="block";
+ document.getElementById("songBox").style.display="block";
 
-  let b2=document.getElementById("b2");
-  b2.classList.add("active");
-  b2.onclick=()=>openScreen(2);
- }
+ let b2=document.getElementById("b2");
+ b2.classList.add("active");
+ b2.onclick=()=>openScreen(2);
 }
 
 function playSong(){
- document.getElementById("song").play();
+ let s=document.getElementById("song");
+ s.currentTime=0;
+ s.play().catch(()=>alert("اضغطي تاني 👀"));
 }
 
 /* 🎂 */
